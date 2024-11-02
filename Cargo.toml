@@ -1,0 +1,18 @@
+[package]
+name = "ares"
+version = "0.1.0"
+edition = "2021"
+authors = ["tims <0xtimsb@gmail.com>"]
+description = "ares is tiny gui library for rust"
+publish = false
+license = "GPL-3.0"
+
+[lib]
+path = "src/ares.rs"
+
+[dependencies]
+
+
+[[example]]
+name = "hello_world"
+path = "examples/hello_world.rs"
