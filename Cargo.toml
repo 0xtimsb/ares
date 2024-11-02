@@ -10,6 +10,10 @@ license = "GPL-3.0"
 [lib]
 path = "src/ares.rs"
 
+[features]
+default = ["x11"]
+x11 = []
+
 [dependencies]
 x11rb = { version = "0.13.0", features = [
     "allow-unsafe-code",
@@ -20,6 +24,7 @@ x11rb = { version = "0.13.0", features = [
     "resource_manager",
     "sync",
 ]}
+anyhow = "1.0"
 
 [[example]]
 name = "hello_world"
