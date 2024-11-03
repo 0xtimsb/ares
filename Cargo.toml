@@ -25,6 +25,8 @@ x11rb = { version = "0.13.0", features = [
     "sync",
 ]}
 anyhow = "1.0"
+slotmap = "1.0.7"
+raw-window-handle = "0.6.2"
 
 [[example]]
 name = "hello_world"

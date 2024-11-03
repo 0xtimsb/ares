@@ -1,3 +1,3 @@
-mod window;
+mod client;
 
-pub(crate) use window::*;
+pub(crate) use client::*;

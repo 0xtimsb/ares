@@ -238,3 +238,7 @@ pub fn create_window() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 }
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    create_window()
+}
