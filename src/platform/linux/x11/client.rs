@@ -12,6 +12,7 @@ pub struct X11ClientState {
 pub(crate) struct X11Client(Rc<RefCell<X11ClientState>>);
 
 impl X11Client {
+    // returns a new instance of X11Client
     pub(crate) fn new() -> Self {
         let (conn, screen_num) = XCBConnection::connect(None).unwrap();
 
@@ -22,5 +23,6 @@ impl X11Client {
 }
 
 impl LinuxClient for X11Client {
+    // x11 specific logic to start the app
     fn run(&self) {}
 }
