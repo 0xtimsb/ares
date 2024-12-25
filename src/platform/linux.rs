@@ -1,7 +1,7 @@
 mod platform;
-#[cfg(feature = "x11")]
-mod x11;
+#[cfg(feature = "wayland")]
+mod wayland;
 
 pub(crate) use platform::*;
-#[cfg(feature = "x11")]
-pub(crate) use x11::*;
+#[cfg(feature = "wayland")]
+pub(crate) use wayland::*;
