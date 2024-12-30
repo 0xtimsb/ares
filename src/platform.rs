@@ -4,10 +4,9 @@ mod linux;
 #[cfg(target_os = "linux")]
 pub(crate) use linux::*;
 
-pub(crate) trait Platform: 'static {
-    fn run(&self);
-    fn quit(&self);
-    fn open_window(&self) -> anyhow::Result<Box<dyn PlatformWindow>>;
-}
+use crate::WindowSettings;
 
-pub(crate) trait PlatformWindow {}
+pub(crate) trait Platform: 'static {
+    fn open_window(&self, settings: WindowSettings);
+    fn quit(&self);
+}

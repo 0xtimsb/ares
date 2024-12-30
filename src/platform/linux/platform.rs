@@ -1,18 +1,16 @@
-use crate::platform::{Platform, PlatformWindow};
+use crate::{platform::Platform, WindowSettings};
 
 pub trait LinuxClient {
-    fn run(&self);
-    fn open_window(&self) -> anyhow::Result<Box<dyn PlatformWindow>>;
+    fn open_window(&self, settings: WindowSettings);
+    fn quit(&self);
 }
 
 impl<P: LinuxClient + 'static> Platform for P {
-    fn run(&self) {
-        LinuxClient::run(self);
+    fn open_window(&self, settings: WindowSettings) {
+        LinuxClient::open_window(self, settings);
     }
 
-    fn open_window(&self) -> anyhow::Result<Box<dyn PlatformWindow>> {
-        LinuxClient::open_window(self)
+    fn quit(&self) {
+        LinuxClient::quit(self);
     }
-
-    fn quit(&self) {}
 }

@@ -1,36 +1,24 @@
-use std::{
-    cell::RefCell,
-    rc::{Rc, Weak},
+use crate::{
+    platform::{Platform, WaylandClient},
+    WindowSettings,
 };
 
-use crate::platform::{Platform, WaylandClient};
-
-pub struct AppContext {
-    pub(crate) platform: Rc<dyn Platform>,
+pub struct App {
+    platform: Box<dyn Platform>,
 }
 
-impl AppContext {
-    pub(crate) fn new(platform: Rc<dyn Platform>) -> Rc<RefCell<AppContext>> {
-        let app = Rc::new(RefCell::new(AppContext {
-            platform: platform.clone(),
-        }));
-        app
+impl App {
+    pub fn new() -> Self {
+        Self {
+            platform: Box::new(WaylandClient::new()),
+        }
+    }
+
+    pub fn open_window(&self, settings: WindowSettings) {
+        self.platform.open_window(settings);
     }
 
     pub fn quit(&self) {
         self.platform.quit();
-    }
-}
-
-pub struct App(Rc<RefCell<AppContext>>);
-
-impl App {
-    pub fn new() -> Self {
-        Self(AppContext::new(Rc::new(WaylandClient::new())))
-    }
-
-    pub fn run(self) {
-        let platform = self.0.borrow().platform.clone();
-        platform.run();
     }
 }
