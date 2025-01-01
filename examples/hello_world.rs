@@ -1,4 +1,4 @@
-use ares::{App, Color, Element, Render, WindowSettings};
+use ares::{div, App, Color, Element, Render, WindowSettings};
 use taffy::prelude::*;
 
 struct Counter {
@@ -7,16 +7,14 @@ struct Counter {
 
 impl Render for Counter {
     fn render(&self) -> Element {
-        Element::new()
-            .with_style(Style {
-                display: Display::Flex,
-                size: Size {
-                    width: Dimension::Length(100.0),
-                    height: Dimension::Length(40.0),
-                },
-                ..Default::default()
+        div()
+            .w(100.0)
+            .h(40.0)
+            .display(Display::Flex)
+            .bg(Color::RED)
+            .on_mouse_click(|click| {
+                println!("Clicked: {:?}", click.button);
             })
-            .with_background_color(Color::RED)
     }
 }
 

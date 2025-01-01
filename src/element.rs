@@ -6,11 +6,29 @@ pub trait Render {
     fn render(&self) -> Element;
 }
 
-#[derive(Clone)]
+pub struct MouseEvent {
+    pub x: f32,
+    pub y: f32,
+    pub button: MouseButton,
+}
+
+#[derive(Debug)]
+pub enum MouseButton {
+    Left,
+    Right,
+}
+
+type ClickCallback = Box<dyn Fn(&MouseEvent)>;
+
 pub struct Element {
     pub style: Style,
     pub children: Vec<Element>,
     pub background_color: Option<Color>,
+    pub click_handler: Option<ClickCallback>,
+}
+
+pub fn div() -> Element {
+    Element::new()
 }
 
 impl Element {
@@ -19,6 +37,7 @@ impl Element {
             style: Style::default(),
             children: Vec::new(),
             background_color: None,
+            click_handler: None,
         }
     }
 
@@ -37,34 +56,15 @@ impl Element {
         self
     }
 
-    pub fn to_buffer(&mut self, available_space: Size<AvailableSpace>) -> Buffer {
-        let mut taffy = TaffyTree::new();
-
-        let mut root_container = Element::new()
-            .with_style(Style {
-                size: Size {
-                    width: match available_space.width {
-                        AvailableSpace::Definite(points) => Dimension::Length(points),
-                        _ => Dimension::Length(0.0),
-                    },
-                    height: match available_space.height {
-                        AvailableSpace::Definite(points) => Dimension::Length(points),
-                        _ => Dimension::Length(0.0),
-                    },
-                },
-                ..Style::default()
-            })
-            .with_children(vec![self.clone()]);
-
-        let root_node = root_container.prepaint(&mut taffy, available_space);
-        root_container.paint(&taffy, root_node)
-    }
-
-    fn prepaint(&mut self, taffy: &mut TaffyTree, available_space: Size<AvailableSpace>) -> NodeId {
-        fn create_node(taffy: &mut TaffyTree, element: &mut Element) -> NodeId {
+    pub fn compute_layout(
+        &self,
+        taffy: &mut TaffyTree,
+        available_space: Size<AvailableSpace>,
+    ) -> NodeId {
+        fn create_node(taffy: &mut TaffyTree, element: &Element) -> NodeId {
             let child_nodes: Vec<_> = element
                 .children
-                .iter_mut()
+                .iter()
                 .map(|child| create_node(taffy, child))
                 .collect();
             taffy
@@ -76,7 +76,7 @@ impl Element {
         root_node
     }
 
-    fn paint(&mut self, taffy: &TaffyTree, root_node: NodeId) -> Buffer {
+    pub fn paint(&self, taffy: &TaffyTree, root_node: NodeId) -> Buffer {
         let root_layout = taffy.layout(root_node).unwrap();
         let buffer_size = (root_layout.size.width * root_layout.size.height * 4.0) as usize;
         let mut buffer_data = vec![0u8; buffer_size];
@@ -84,7 +84,7 @@ impl Element {
 
         fn render_recursive(
             taffy: &TaffyTree,
-            element: &mut Element,
+            element: &Element,
             node: NodeId,
             buffer: &mut [u8],
             stride: usize,
@@ -109,11 +109,7 @@ impl Element {
                     }
                 }
             }
-            for (child, child_node) in element
-                .children
-                .iter_mut()
-                .zip(taffy.children(node).unwrap())
-            {
+            for (child, child_node) in element.children.iter().zip(taffy.children(node).unwrap()) {
                 render_recursive(taffy, child, child_node, buffer, stride);
             }
         }
@@ -125,6 +121,33 @@ impl Element {
             width: root_layout.size.width as u32,
             height: root_layout.size.height as u32,
         }
+    }
+
+    pub fn w(mut self, value: f32) -> Self {
+        self.style.size.width = Dimension::Length(value);
+        self
+    }
+
+    pub fn h(mut self, value: f32) -> Self {
+        self.style.size.height = Dimension::Length(value);
+        self
+    }
+
+    pub fn bg(self, color: Color) -> Self {
+        self.with_background_color(color)
+    }
+
+    pub fn display(mut self, display: Display) -> Self {
+        self.style.display = display;
+        self
+    }
+
+    pub fn on_mouse_click<F>(mut self, callback: F) -> Self
+    where
+        F: Fn(&MouseEvent) + 'static,
+    {
+        self.click_handler = Some(Box::new(callback));
+        self
     }
 }
 

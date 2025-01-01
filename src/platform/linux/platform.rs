@@ -1,9 +1,10 @@
-use crate::component::Buffer;
+use crate::element::{Buffer, MouseEvent};
 use crate::platform::Platform;
 
 pub trait LinuxClient {
     fn create_window(&self, buffer: &Buffer);
     fn quit(&self);
+    fn set_mouse_handler(&self, handler: Box<dyn Fn(MouseEvent)>);
 }
 
 impl<P: LinuxClient + 'static> Platform for P {
@@ -13,5 +14,9 @@ impl<P: LinuxClient + 'static> Platform for P {
 
     fn quit(&self) {
         LinuxClient::quit(self);
+    }
+
+    fn set_mouse_handler(&self, handler: Box<dyn Fn(MouseEvent)>) {
+        LinuxClient::set_mouse_handler(self, handler);
     }
 }
