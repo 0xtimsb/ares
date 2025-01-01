@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub struct WindowSettings {
     pub width: u32,
     pub height: u32,

@@ -1,13 +1,14 @@
-use crate::{platform::Platform, WindowSettings};
+use crate::component::Buffer;
+use crate::platform::Platform;
 
 pub trait LinuxClient {
-    fn open_window(&self, settings: WindowSettings);
+    fn create_window(&self, buffer: &Buffer);
     fn quit(&self);
 }
 
 impl<P: LinuxClient + 'static> Platform for P {
-    fn open_window(&self, settings: WindowSettings) {
-        LinuxClient::open_window(self, settings);
+    fn create_window(&self, buffer: &Buffer) {
+        LinuxClient::create_window(self, buffer);
     }
 
     fn quit(&self) {
