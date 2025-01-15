@@ -1,12 +1,16 @@
+mod ables;
 mod app;
 mod element;
-mod mouse;
 mod platform;
 mod utils;
 mod window;
 
+pub use ables::{
+  paintable::{Paintable, Render},
+  stylable::Stylable,
+  touchable::Touchable,
+};
 pub use app::App;
-pub use element::{div, Element, Render};
-pub use mouse::{ClickCallback, MouseEvent};
+pub use element::div::div;
 pub use utils::Color;
 pub use window::WindowSettings;

@@ -23,6 +23,7 @@ anyhow = "1.0"
 libc = "0.2.169"
 memfd = "0.6.4"
 taffy = "0.7.1"
+downcast-rs = "2.0.1"
 
 [[example]]
 name = "hello_world"
