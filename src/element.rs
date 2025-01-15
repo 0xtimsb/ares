@@ -1,24 +1,10 @@
 use taffy::prelude::*;
 
-use crate::utils::Color;
+use crate::{utils::Color, ClickCallback, MouseEvent};
 
 pub trait Render {
     fn render(&self) -> Element;
 }
-
-pub struct MouseEvent {
-    pub x: f32,
-    pub y: f32,
-    pub button: MouseButton,
-}
-
-#[derive(Debug)]
-pub enum MouseButton {
-    Left,
-    Right,
-}
-
-type ClickCallback = Box<dyn Fn(&MouseEvent)>;
 
 pub struct Element {
     pub style: Style,

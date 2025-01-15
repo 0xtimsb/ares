@@ -4,7 +4,7 @@ mod linux;
 #[cfg(target_os = "linux")]
 pub(crate) use linux::*;
 
-use crate::element::{Buffer, MouseEvent};
+use crate::{element::Buffer, MouseEvent};
 
 pub(crate) trait Platform: 'static {
     fn create_window(&self, buffer: &Buffer);

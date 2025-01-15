@@ -16,8 +16,10 @@ use wayland_client::{
 };
 use wayland_protocols::xdg::shell::client::{xdg_surface, xdg_toplevel, xdg_wm_base};
 
-use crate::element::{Buffer, MouseButton, MouseEvent};
+use crate::element::Buffer;
+use crate::mouse::MouseButton;
 use crate::platform::LinuxClient;
+use crate::MouseEvent;
 
 struct WaylandClientState {
     event_loop: Option<EventLoop<'static, WaylandClientState>>,

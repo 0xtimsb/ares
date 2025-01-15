@@ -1,5 +1,6 @@
-use crate::element::{Buffer, MouseEvent};
+use crate::element::Buffer;
 use crate::platform::Platform;
+use crate::MouseEvent;
 
 pub trait LinuxClient {
     fn create_window(&self, buffer: &Buffer);
