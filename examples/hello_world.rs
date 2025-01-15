@@ -1,4 +1,4 @@
-use ares::{div, App, Color, Paintable, Render, Stylable, Touchable, WindowSettings};
+use ares::{div, text, App, Color, Paintable, Render, Stylable, Touchable, WindowSettings};
 use taffy::prelude::*;
 
 struct Counter {
@@ -8,10 +8,11 @@ struct Counter {
 impl Render for Counter {
   fn render(&self) -> impl Paintable {
     div()
-      .w(100.0)
-      .h(40.0)
+      .w(200.0)
+      .h(200.0)
       .display(Display::Flex)
-      .bg(Color::RED)
+      .bg(Color::rgb(255, 255, 255))
+      .child(text("Hello").size(24.0).color(Color::rgb(0, 0, 0)))
       .on_click(|click| {
         println!("Clicked: {:?}", click.button);
       })

@@ -127,6 +127,31 @@ impl Paintable for Div {
             }
           }
         }
+      } else {
+        let child_buffer = element.paint(taffy, node);
+        let x = layout.location.x.round() as usize;
+        let y = layout.location.y.round() as usize;
+
+        for row in 0..child_buffer.height as usize {
+          for col in 0..child_buffer.width as usize {
+            let src_idx = (row * child_buffer.width as usize + col) * 4;
+            let dest_idx = ((y + row) * stride + (x + col)) * 4;
+
+            if dest_idx + 3 < buffer.len() && src_idx + 3 < child_buffer.data.len() {
+              let alpha = child_buffer.data[src_idx + 3] as f32 / 255.0;
+
+              for c in 0..3 {
+                let src_color = child_buffer.data[src_idx + c] as f32;
+                let dest_color = buffer[dest_idx + c] as f32;
+                buffer[dest_idx + c] =
+                  ((src_color * alpha + dest_color * (1.0 - alpha)) as u8).min(255);
+              }
+
+              let new_alpha = (alpha * 255.0) as u8;
+              buffer[dest_idx + 3] = new_alpha.max(buffer[dest_idx + 3]);
+            }
+          }
+        }
       }
 
       if let Some(childable) = element.as_childable() {
