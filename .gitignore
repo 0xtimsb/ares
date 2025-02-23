@@ -1,8 +1,36 @@
-/target
+**/*.db
+**/cargo-target
+**/target
+**/venv
+*.wasm
+*.xcodeproj
+.DS_Store
+.blob_store
+.build
+.envrc
+.flatpak-builder
+.idea
+.netrc
+.pytest_cache
+.swiftpm
+.swiftpm/config/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.venv
+.vscode
+.wrangler
+/.direnv
+/assets/*licenses.*
+/crates/collab/seed.json
+/crates/theme/schemas/theme.json
+/crates/zed/resources/flatpak/flatpak-cargo-sources.json
+/dev.zed.Zed*.json
+/plugins/bin
+/script/node_modules
+/snap
+/zed.xcworkspace
+DerivedData/
+Packages
+xcuserdata/
 
-
-# Added by cargo
-#
-# already existing elements were commented out
-
-#/target
+# Don't commit any secrets to the repo.
+.env.secret.toml

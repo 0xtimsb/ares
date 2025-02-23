@@ -1,0 +1,16 @@
+Ares - A Modified Version of GPUI
+Copyright 2025 Smit
+
+This software is based on the GPUI library, originally developed by Zed Industries, Inc.
+GPUI is licensed under the Apache License, Version 2.0.
+
+Modifications in this version have been made by Smit and are also licensed under
+the Apache License, Version 2.0.
+
+License for Ares:
+See the LICENSE file in this repository or visit:
+https://github.com/0xtimsb/ares/blob/main/LICENSE
+
+Original GPUI License:
+GPUI is licensed under the Apache License, Version 2.0. You can find its original license at:
+https://github.com/zed-industries/zed/blob/main/LICENSE-APACHE

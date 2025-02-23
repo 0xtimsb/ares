@@ -1,31 +1,66 @@
-[package]
-name = "ares"
-version = "0.1.0"
-edition = "2021"
-authors = ["tims <0xtimsb@gmail.com>"]
-description = "ares is tiny gui library for rust"
+[workspace]
+resolver = "2"
+members = [
+    "crates/gpui",
+    "crates/gpui_macros",
+    "crates/refineable",
+    "crates/refineable/derive_refineable",
+    "crates/semantic_version",
+    "crates/util",
+    "crates/util_macros",
+]
+default-members = ["crates/gpui"]
+
+[workspace.package]
 publish = false
-license = "GPL-3.0"
+edition = "2021"
 
-[lib]
-path = "src/ares.rs"
+[workspace.dependencies]
 
-[features]
-default = ["wayland"]
-wayland = []
+gpui = { path = "crates/gpui", default-features = false, features = [
+    "http_client",
+] }
+gpui_macros = { path = "crates/gpui_macros" }
+refineable = { path = "crates/refineable" }
+semantic_version = { path = "crates/semantic_version" }
+util = { path = "crates/util" }
+util_macros = { path = "crates/util_macros" }
 
-[dependencies]
-wayland-client = "0.31.7"
-wayland-protocols = { version = "0.32.5", features = ["client"] }
-calloop = "0.14.2"
-calloop-wayland-source = "0.4.0"
-anyhow = "1.0"
-libc = "0.2.169"
-memfd = "0.6.4"
-taffy = "0.7.1"
-downcast-rs = "2.0.1"
-fontdue = "0.9.2"
+[workspace.lints.clippy]
+dbg_macro = "deny"
+todo = "deny"
 
-[[example]]
-name = "hello_world"
-path = "examples/hello_world.rs"
+# Motivation: We use `vec![a..b]` a lot when dealing with ranges in text, so
+# warning on this rule produces a lot of noise.
+single_range_in_vec_init = "allow"
+
+# These are all of the rules that currently have violations in the Zed
+# codebase.
+#
+# We'll want to drive this list down by either:
+# 1. fixing violations of the rule and begin enforcing it
+# 2. deciding we want to allow the rule permanently, at which point
+#    we should codify that separately above.
+#
+# This list shouldn't be added to; it should only get shorter.
+# =============================================================================
+
+# There are a bunch of rules currently failing in the `style` group, so
+# allow all of those, for now.
+style = { level = "allow", priority = -1 }
+
+# Temporary list of style lints that we've fixed so far.
+module_inception = { level = "deny" }
+question_mark = { level = "deny" }
+redundant_closure = { level = "deny" }
+# Individual rules that have violations in the codebase:
+type_complexity = "allow"
+# We often return trait objects from `new` functions.
+new_ret_no_self = { level = "allow" }
+# We have a few `next` functions that differ in lifetimes
+# compared to Iterator::next. Yet, clippy complains about those.
+should_implement_trait = { level = "allow" }
+let_underscore_future = "allow"
+
+[workspace.metadata.cargo-machete]
+ignored = ["bindgen", "cbindgen", "prost_build", "serde"]
